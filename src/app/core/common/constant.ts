@@ -1,0 +1,16 @@
+export const WEATHER_TYPES = {
+  SUNNY: 'Sunny',
+  CLEAR: 'Clear',
+  PARTLY_CLOUDY: 'Partly Cloudy',
+  MOSTLY_CLOUDY: 'Mostly Cloudy',
+  CLOUDY: 'Cloudy',
+  FOG: 'Fog / Mist',
+  RAINY: 'Rainy',
+  HEAVY_RAIN: 'Heavy Rain',
+  THUNDERSTORM: 'Thunderstorm',
+  SNOWY: 'Snowy',
+  SLEET_HAIL: 'Sleet / Hail',
+  WINDY: 'Windy',
+  EXTREME_HOT: 'Extreme Hot',
+  EXTREME_COLD: 'Extreme Cold',
+};

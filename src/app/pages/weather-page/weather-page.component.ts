@@ -1,0 +1,146 @@
+import { Component } from '@angular/core';
+import { ApiService } from '../../core/services/api.service';
+import { SHARED_MODULES } from '../../core/common/shared-module';
+import { ForecastListComponent } from '../forecast-list/forecast-list.component';
+import { WeatherCardComponent } from '../weather-card/weather-card.component';
+import { CommonService } from '../../core/services/common.service';
+
+@Component({
+  selector: 'app-weather-page',
+  standalone: true,
+  imports: [SHARED_MODULES, ForecastListComponent, WeatherCardComponent],
+  templateUrl: './weather-page.component.html',
+  styleUrl: './weather-page.component.css',
+})
+export class WeatherPageComponent {
+  weatherData: any;
+  filteredHours: any;
+  todayHourly: any;
+
+  constructor(
+    private apiService: ApiService,
+    private commonService: CommonService
+  ) {}
+
+  ngOnInit() {
+    this.apiService.city$.subscribe((city) => {
+      if (city) this.getWeather(city);
+    });
+    // this.getWeather('Mumbai');
+  }
+
+  getWeather(city: any) {
+    this.apiService.getWeather({ city: city.city }).subscribe({
+      next: (res: any) => {
+        const data = res.data;
+
+        const todayDate = new Date().toISOString().split('T')[0];
+        debugger;
+        const todayHourly = data.forecast.hourly.time.filter((time: any) => {
+          return new Date(time).toDateString() === new Date().toDateString();
+        });
+
+        const hourly = data.forecast.hourly.time.map((t: string, i: number) => {
+          const temp = data.forecast.hourly.temperature_2m[i];
+          const wind = data.forecast.hourly.wind_speed_10m[i];
+          const humidity = data.forecast.hourly.relative_humidity_2m[i];
+          const precipitation = data.forecast.hourly.precipitation[i];
+          const precipitation_probability =
+            data.forecast.hourly.precipitation_probability[i];
+          const apparent_temperature =
+            data.forecast.hourly.apparent_temperature[i];
+          const visibility = data.forecast.hourly.visibility[i];
+          const weather_code = data.forecast.hourly.weather_code[i];
+          return {
+            time: this.commonService.formatDate(t),
+            temp,
+            wind,
+            humidity,
+            precipitation,
+            precipitation_probability,
+            apparent_temperature,
+            visibility,
+            weather_code,
+            condition: this.commonService.getWeatherCondition(
+              temp,
+              precipitation,
+              humidity,
+              wind
+            ),
+          };
+        });
+
+        const daily = data.forecast.daily.time.map((t: string, i: number) => {
+          const appratent_temp_max =
+            data.forecast.daily.apparent_temperature_max[i];
+          const appratent_temp_min =
+            data.forecast.daily.apparent_temperature_min[i];
+          const temp_max = data.forecast.daily.temperature_2m_max[i];
+          const temp_min = data.forecast.daily.temperature_2m_min[i];
+          const daylight_duration = data.forecast.daily.daylight_duration[i];
+          const sunrise = data.forecast.daily.sunrise[i];
+          const sunset = data.forecast.daily.sunset[i];
+          const uv_index_max = data.forecast.daily.uv_index_max[i];
+          return {
+            time: this.commonService.formatDate(t),
+            appratent_temp_max,
+            appratent_temp_min,
+            temp_max,
+            temp_min,
+            daylight_duration,
+            sunrise: this.commonService.formatDate(sunrise),
+            sunset: this.commonService.formatDate(sunset),
+            uv_index_max,
+          };
+        });
+
+        const minutely_15 = data.forecast.minutely_15.time.map(
+          (t: string, i: number) => {
+            const apparent_temperature =
+              data.forecast.minutely_15.apparent_temperature[i];
+            const temp = data.forecast.minutely_15.temperature_2m[i];
+            const visibility = (
+              data.forecast.minutely_15.visibility[i] / 1609
+            ).toFixed(1);
+            return {
+              time: this.commonService.formatDate(t),
+              apparent_temperature,
+              temp,
+              visibility,
+            };
+          }
+        );
+
+        const today = {
+          temperature: data.forecast.current.temperature_2m,
+          apparent_temp: data.forecast.current.apparent_temperature,
+          condition: hourly?.[0]?.condition,
+          wind: hourly?.[0]?.wind || 0,
+          humidity: hourly?.[0]?.humidity || 0,
+          visibility: minutely_15?.[0]?.visibility || 0,
+          pressure: data.forecast.current.surface_pressure || 0,
+          uvIndex: daily?.[0]?.uv_index_max || 0,
+          sunrise: daily?.[0]?.sunrise || '',
+          sunset: daily?.[0]?.sunset || '',
+          airQuality: data.forecast.airQuality?.pm2_5 || 0,
+        };
+
+        this.weatherData = {
+          ...data,
+          forecast: {
+            ...data.forecast,
+            hourly,
+            minutely_15,
+            todayHourly,
+            daily,
+            today,
+          },
+        };
+
+        this.filteredHours = hourly;
+        console.log(this.weatherData);
+      },
+      error: (err) => console.error('Failed to fetch weather:', err),
+    });
+  }
+}

@@ -1,0 +1,49 @@
+<div class="bg-white rounded-2xl shadow p-4 sm:p-6 relative">
+ 
+  <div
+    class="flex gap-6 border-b pb-2 mb-4 text-sm sm:text-base bg-white sticky top-0 z-20"
+  >
+    <button
+      *ngFor="let tab of tabs"
+      (click)="selectTab(tab)"
+      [ngClass]="
+        selectedTab === tab
+          ? 'font-semibold text-sky-600 border-b-2 border-sky-600 pb-1'
+          : 'text-gray-500'
+      "
+    >
+      {{ tab }}
+    </button>
+
+    <button
+      class="ml-auto bg-gray-900 text-white px-4 py-1 rounded-lg text-xs sm:text-sm"
+    >
+      See Monthly Cast
+    </button>
+  </div>
+
+  
+  <div class="divide-y max-h-[500px] overflow-y-auto">
+    <div
+      *ngFor="let hour of filteredHours"
+      class="flex items-center justify-between py-4"
+    >
+    
+      <div class="flex items-center gap-3">
+        <img src="assets/cloud.png" class="w-8 h-8" />
+        <div>
+          <p class="text-xs sm:text-sm font-medium text-gray-600">
+            {{ hour.time }}
+          </p>
+          <p class="text-xs sm:text-sm text-gray-700">{{ hour.condition }}</p>
+        </div>
+      </div>
+
+      <div class="text-right">
+        <p class="text-lg sm:text-xl font-semibold">{{ hour.temp }}°C</p>
+        <p class="text-xs text-gray-500">Wind: {{ hour.wind }} km/h</p>
+        <p class="text-xs text-gray-500">Humidity: {{ hour.humidity }}%</p>
+      </div>
+    </div>
+  </div>
+</div>
