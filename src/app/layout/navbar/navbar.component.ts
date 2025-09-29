@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Output,
+} from '@angular/core';
 import { SHARED_MODULES } from '../../core/common/shared-module';
 import { ApiService } from '../../core/services/api.service';
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
@@ -25,7 +31,7 @@ export class NavbarComponent {
 
   isDark = false;
 
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: ApiService, private elRef: ElementRef) {
     this.$searchSubject
       .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.$destroy))
       .subscribe((term) => {
@@ -39,9 +45,24 @@ export class NavbarComponent {
         });
       });
 
+    this.apiService.hideSearch$.subscribe(() => {
+      this.showMobileSearch = false;
+    });
+
     window.addEventListener('resize', () => {
       this.screenWidth = window.innerWidth;
     });
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    if (
+      this.screenWidth < 640 &&
+      this.showMobileSearch &&
+      !this.elRef.nativeElement.contains(event.target)
+    ) {
+      this.showMobileSearch = false;
+    }
   }
 
   onInputChange() {
@@ -53,7 +74,6 @@ export class NavbarComponent {
     this.filteredCities = [];
     this.searchCity.emit(city);
     this.apiService.setCity(city);
-    this.showMobileSearch = false;
     console.log('Selected city:', city);
   }
 
@@ -73,7 +93,6 @@ export class NavbarComponent {
               if (res.status === 'success') {
                 this.searchTerm = res.data.city;
                 this.filteredCities = [res.data];
-                this.showMobileSearch = false;
               }
             });
         },

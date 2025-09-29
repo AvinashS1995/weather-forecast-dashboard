@@ -1,13 +1,11 @@
 <div class="bg-white rounded-2xl shadow p-6">
-  
+
   <div class="flex justify-between items-center">
     <h2 class="text-gray-500 text-sm">Current Weather</h2>
     <div class="text-sm text-gray-600 flex items-center gap-1 cursor-pointer">
       Weather Forecast
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-        viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M19 9l-7 7-7-7" />
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
     </div>
   </div>
@@ -35,7 +33,8 @@
   </div>
 
   <p class="mt-4 text-gray-600 text-sm">
-    There will be mostly sunny skies. High: {{ weather?.forecast?.today?.temp_max }}° / Low: {{ weather?.forecast?.today?.temp_min }}°
+    There will be mostly sunny skies. High: {{ weather?.forecast?.today?.temp_max }}° / Low: {{
+    weather?.forecast?.today?.temp_min }}°
 
   </p>
 </div>

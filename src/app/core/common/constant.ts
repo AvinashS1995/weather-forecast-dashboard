@@ -1,4 +1,3 @@
-// // src/app/core/constants/weather-constants.ts
 // export const WEATHER_CODE_MAP: { [key: number]: string } = {
 //   0: 'Clear Sky',
 //   1: 'Mainly Clear',
@@ -48,28 +47,28 @@ export const WEATHER_TYPES = {
 };
 
 export const WEATHER_CODE_MAP: { [key: number]: string } = {
-  0: WEATHER_TYPES.CLEAR, // Clear sky → Sunny
-  1: WEATHER_TYPES.SUNNY, // Mainly clear → Sunny
-  2: WEATHER_TYPES.PARTLY_CLOUDY, // Partly cloudy
-  3: WEATHER_TYPES.MOSTLY_CLOUDY, // Mostly cloudy
-  45: WEATHER_TYPES.FOG, // Fog
-  48: WEATHER_TYPES.FOG, // Depositing rime fog
-  51: WEATHER_TYPES.RAINY, // Drizzle: Light
-  53: WEATHER_TYPES.RAINY, // Drizzle: Moderate
-  55: WEATHER_TYPES.RAINY, // Drizzle: Dense
-  61: WEATHER_TYPES.RAINY, // Rain: Slight
-  63: WEATHER_TYPES.RAINY, // Rain: Moderate
-  65: WEATHER_TYPES.HEAVY_RAIN, // Rain: Heavy
-  66: WEATHER_TYPES.HEAVY_RAIN, // Freezing rain: Light
-  67: WEATHER_TYPES.HEAVY_RAIN, // Freezing rain: Heavy
-  71: WEATHER_TYPES.SNOWY, // Snow fall: Slight
-  73: WEATHER_TYPES.SNOWY, // Snow fall: Moderate
-  75: WEATHER_TYPES.SNOWY, // Snow fall: Heavy
-  77: WEATHER_TYPES.SLEET_HAIL, // Snow grains
-  80: WEATHER_TYPES.RAINY, // Rain showers: Slight
-  81: WEATHER_TYPES.HEAVY_RAIN, // Rain showers: Moderate
-  82: WEATHER_TYPES.HEAVY_RAIN, // Rain showers: Violent
-  95: WEATHER_TYPES.THUNDERSTORM, // Thunderstorm: Slight or moderate
-  96: WEATHER_TYPES.THUNDERSTORM, // Thunderstorm with hail
-  99: WEATHER_TYPES.THUNDERSTORM, // Thunderstorm with heavy hail
+  0: WEATHER_TYPES.CLEAR,
+  1: WEATHER_TYPES.SUNNY,
+  2: WEATHER_TYPES.PARTLY_CLOUDY,
+  3: WEATHER_TYPES.MOSTLY_CLOUDY,
+  45: WEATHER_TYPES.FOG,
+  48: WEATHER_TYPES.FOG,
+  51: WEATHER_TYPES.RAINY,
+  53: WEATHER_TYPES.RAINY,
+  55: WEATHER_TYPES.RAINY,
+  61: WEATHER_TYPES.RAINY,
+  63: WEATHER_TYPES.RAINY,
+  65: WEATHER_TYPES.HEAVY_RAIN,
+  66: WEATHER_TYPES.HEAVY_RAIN,
+  67: WEATHER_TYPES.HEAVY_RAIN,
+  71: WEATHER_TYPES.SNOWY,
+  73: WEATHER_TYPES.SNOWY,
+  75: WEATHER_TYPES.SNOWY,
+  77: WEATHER_TYPES.SLEET_HAIL,
+  80: WEATHER_TYPES.RAINY,
+  81: WEATHER_TYPES.HEAVY_RAIN,
+  82: WEATHER_TYPES.HEAVY_RAIN,
+  95: WEATHER_TYPES.THUNDERSTORM,
+  96: WEATHER_TYPES.THUNDERSTORM,
+  99: WEATHER_TYPES.THUNDERSTORM,
 };

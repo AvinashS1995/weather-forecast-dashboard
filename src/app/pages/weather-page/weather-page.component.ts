@@ -26,7 +26,6 @@ export class WeatherPageComponent {
     this.apiService.city$.subscribe((city) => {
       if (city) this.getWeather(city);
     });
-    // this.getWeather('Mumbai');
   }
 
   getWeather(city: any) {
@@ -147,6 +146,8 @@ export class WeatherPageComponent {
         };
 
         this.filteredHours = hourly;
+
+        this.apiService.hideSearchBox();
         console.log(this.weatherData);
       },
       error: (err) => console.error('Failed to fetch weather:', err),
@@ -154,13 +155,13 @@ export class WeatherPageComponent {
   }
 
   getSunProgress(sunrise?: string, sunset?: string): number {
-    if (!sunrise || !sunset) return 0; // no data yet → start at 0
+    if (!sunrise || !sunset) return 0;
 
     const now = Date.now();
     const sr = new Date(sunrise).getTime();
     const ss = new Date(sunset).getTime();
 
-    if (isNaN(sr) || isNaN(ss)) return 0; // invalid dates
+    if (isNaN(sr) || isNaN(ss)) return 0;
 
     if (now <= sr) return 0;
     if (now >= ss) return 100;

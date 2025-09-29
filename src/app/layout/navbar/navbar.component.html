@@ -1,14 +1,12 @@
 <nav class="bg-white border-b border-gray-200 px-4 lg:px-6 py-2.5 shadow-sm">
   <div class="h-16 flex items-center justify-between mx-auto max-w-screen-xl">
 
-    <!-- Left Logo + Location -->
     <div class="flex items-center gap-3">
-      <!-- Logo -->
+  
       <img src="assets/weather-logo.png" 
            alt="Weather Logo" 
            class="h-9 w-auto object-contain" />
 
-      <!-- Location -->
       <div class="flex items-center text-gray-700 text-sm sm:text-base font-medium gap-1">
         <i class="fa fa-map-marker-alt text-sky-500"></i>
         <span class="truncate max-w-[140px] sm:max-w-[220px]">
@@ -42,7 +40,6 @@
         </button>
       </div>
 
-      <!-- Dropdown -->
       <ul *ngIf="filteredCities.length > 0"
           class="absolute bg-white border border-gray-200 shadow-md mt-1 w-full rounded-lg z-50">
         <li *ngFor="let cities of filteredCities" 

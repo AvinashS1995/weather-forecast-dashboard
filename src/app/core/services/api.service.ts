@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { API_ENDPOINTS } from '../common/api-constant';
 
@@ -11,13 +11,19 @@ export class ApiService {
   apiUrl = environment.apiUrl;
 
   private citySource = new BehaviorSubject<string>('');
+  city$ = this.citySource.asObservable();
+
+  private hideSearchSource = new Subject<void>();
+  hideSearch$ = this.hideSearchSource.asObservable();
 
   constructor(private http: HttpClient) {}
 
-  city$ = this.citySource.asObservable();
-
   setCity(city: string) {
     this.citySource.next(city);
+  }
+
+  hideSearchBox() {
+    this.hideSearchSource.next();
   }
 
   getWeather(payload: any): Observable<any> {

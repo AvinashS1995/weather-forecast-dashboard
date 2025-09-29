@@ -34,24 +34,15 @@ export class ForecastListComponent {
     }
 
     if (this.selectedTab === 'Today Forecast') {
-      // // 🕒 Map hourly
-      // this.filteredHours =
-      //   this.weather.forecast.hourly?.map((h: any) => ({
-      //     ...h,
-      //     displayTime: h.hourDateTime, // already formatted: 12 AM, 1 AM...
-      //     image: this.commonService.getWeatherImage(h.temp, h.condition),
-      //   })) || [];
-
       const now = new Date();
-      const todayDateStr = now.toISOString().split('T')[0]; // e.g., "2025-09-29"
+      const todayDateStr = now.toISOString().split('T')[0];
 
-      // Filter only today hours that are >= current time
       this.filteredHours = this.weather.forecast.hourly
         .filter((h: any) => {
           const hourDate = new Date(h.time);
           return (
-            hourDate.toISOString().split('T')[0] === todayDateStr && // today only
-            hourDate.getTime() >= now.getTime() // future + current hour
+            hourDate.toISOString().split('T')[0] === todayDateStr &&
+            hourDate.getTime() >= now.getTime()
           );
         })
         .map((h: any) => ({
@@ -60,12 +51,11 @@ export class ForecastListComponent {
           displayTime: h.hourDateTime,
         }));
     } else {
-      // 📅 Map daily
       this.filteredHours =
         this.weather.forecast.daily?.map((d: any) => ({
           ...d,
-          displayTime: d.dailyDateTime, // already formatted: Today 29/9, Tue 30/9...
-          image: this.commonService.getWeatherImageByCode(d.weather_code), // pick max temp for icon
+          displayTime: d.dailyDateTime,
+          image: this.commonService.getWeatherImageByCode(d.weather_code),
         })) || [];
     }
   }

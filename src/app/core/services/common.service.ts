@@ -25,7 +25,6 @@ export class CommonService {
     const today = new Date();
 
     if (isDaily) {
-      // 🟢 Daily forecast (Today, Tue 30/9 etc.)
       if (
         date.getDate() === today.getDate() &&
         date.getMonth() === today.getMonth()
@@ -36,10 +35,9 @@ export class CommonService {
         return `${day} ${date.getDate()}/${date.getMonth() + 1}`;
       }
     } else {
-      // 🟢 Hourly forecast (1 AM, 2 PM etc.)
       let hours = date.getHours();
       const ampm = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12 || 12; // Convert 0 → 12
+      hours = hours % 12 || 12;
       return `${hours} ${ampm}`;
     }
   }
