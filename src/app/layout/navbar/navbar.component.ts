@@ -14,6 +14,10 @@ export class NavbarComponent {
   @Output() searchCity = new EventEmitter<string>();
   searchTerm: string = '';
 
+  showMobileSearch: boolean = false;
+
+  screenWidth: number = window.innerWidth;
+
   filteredCities: any[] = [];
 
   private $searchSubject = new Subject<string>();
@@ -34,6 +38,10 @@ export class NavbarComponent {
           error: (err) => console.error('City search failed', err),
         });
       });
+
+    window.addEventListener('resize', () => {
+      this.screenWidth = window.innerWidth;
+    });
   }
 
   onInputChange() {
@@ -45,6 +53,7 @@ export class NavbarComponent {
     this.filteredCities = [];
     this.searchCity.emit(city);
     this.apiService.setCity(city);
+    this.showMobileSearch = false;
     console.log('Selected city:', city);
   }
 
@@ -64,6 +73,7 @@ export class NavbarComponent {
               if (res.status === 'success') {
                 this.searchTerm = res.data.city;
                 this.filteredCities = [res.data];
+                this.showMobileSearch = false;
               }
             });
         },
@@ -79,6 +89,10 @@ export class NavbarComponent {
   toggleDarkMode() {
     this.isDark = !this.isDark;
     document.documentElement.classList.toggle('dark', this.isDark);
+  }
+
+  toggleMobileSearch() {
+    this.showMobileSearch = !this.showMobileSearch;
   }
 
   ngOnDestroy() {

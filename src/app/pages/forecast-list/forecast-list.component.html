@@ -1,5 +1,5 @@
 <div class="bg-white rounded-2xl shadow p-4 sm:p-6 relative">
- 
+  <!-- Tabs -->
   <div
     class="flex gap-6 border-b pb-2 mb-4 text-sm sm:text-base bg-white sticky top-0 z-20"
   >
@@ -14,36 +14,36 @@
     >
       {{ tab }}
     </button>
-
-    <button
-      class="ml-auto bg-gray-900 text-white px-4 py-1 rounded-lg text-xs sm:text-sm"
-    >
-      See Monthly Cast
-    </button>
   </div>
 
-  
+  <!-- Forecast List -->
   <div class="divide-y max-h-[500px] overflow-y-auto">
     <div
-      *ngFor="let hour of filteredHours"
+      *ngFor="let item of filteredHours"
       class="flex items-center justify-between py-4"
     >
-    
+      <!-- Left -->
       <div class="flex items-center gap-3">
-        <img src="assets/cloud.png" class="w-8 h-8" />
+        <img [src]="item.image" class="w-8 h-8" />
         <div>
           <p class="text-xs sm:text-sm font-medium text-gray-600">
-            {{ hour.time }}
+            {{ item.displayTime }}
           </p>
-          <p class="text-xs sm:text-sm text-gray-700">{{ hour.condition }}</p>
+          <p class="text-xs sm:text-sm text-gray-700">
+            {{ item.condition }}
+          </p>
         </div>
       </div>
 
+      <!-- Right -->
       <div class="text-right">
-        <p class="text-lg sm:text-xl font-semibold">{{ hour.temp }}°C</p>
-        <p class="text-xs text-gray-500">Wind: {{ hour.wind }} km/h</p>
-        <p class="text-xs text-gray-500">Humidity: {{ hour.humidity }}%</p>
+        <p class="text-lg sm:text-xl font-semibold">
+          {{ item.temp ? item.temp + '°C' : item.temp_min + '°C - ' + item.temp_max + '°C' }}
+        </p>
+        <p class="text-xs text-gray-500" >Wind: {{ item.wind }} km/h</p>
+        <p class="text-xs text-gray-500" >Humidity: {{ item.humidity }}%</p>
       </div>
     </div>
   </div>
 </div>
+

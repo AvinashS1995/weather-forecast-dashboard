@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { WEATHER_TYPES } from '../common/constant';
+import { WEATHER_CODE_MAP, WEATHER_TYPES } from '../common/constant';
 
 @Injectable({
   providedIn: 'root',
@@ -20,86 +20,73 @@ export class CommonService {
     return `${day} ${hours} ${ampm}`;
   }
 
-  getWeatherCondition(
-    temp: number,
-    precip: number,
-    humidity: number,
-    wind: number
-  ): string {
-    switch (true) {
-      case temp >= 40:
-        return WEATHER_TYPES.EXTREME_HOT;
-      case temp <= -5:
-        return WEATHER_TYPES.EXTREME_COLD;
-      case precip > 10:
-        return WEATHER_TYPES.HEAVY_RAIN;
-      case precip >= 5 && wind > 20:
-        return WEATHER_TYPES.THUNDERSTORM;
-      case precip >= 1:
-        if (temp <= 0) return WEATHER_TYPES.SNOWY;
-        if (temp <= 2) return WEATHER_TYPES.SLEET_HAIL;
-        return WEATHER_TYPES.RAINY;
-      case humidity > 90 && temp < 15 && wind < 5:
-        return WEATHER_TYPES.FOG;
-      case humidity > 85:
-        return WEATHER_TYPES.CLOUDY;
-      case humidity > 70:
-        return WEATHER_TYPES.MOSTLY_CLOUDY;
-      case humidity > 60:
-        return WEATHER_TYPES.PARTLY_CLOUDY;
-      case wind > 20:
-        return WEATHER_TYPES.WINDY;
-      case temp >= 30:
-        return WEATHER_TYPES.SUNNY;
-      default:
-        return WEATHER_TYPES.CLEAR;
+  formatTime(dateStr: string, isDaily: boolean = false): string {
+    const date = new Date(dateStr);
+    const today = new Date();
+
+    if (isDaily) {
+      // 🟢 Daily forecast (Today, Tue 30/9 etc.)
+      if (
+        date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth()
+      ) {
+        return `Today ${date.getDate()}/${date.getMonth() + 1}`;
+      } else {
+        const day = date.toLocaleDateString('en-US', { weekday: 'short' });
+        return `${day} ${date.getDate()}/${date.getMonth() + 1}`;
+      }
+    } else {
+      // 🟢 Hourly forecast (1 AM, 2 PM etc.)
+      let hours = date.getHours();
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12; // Convert 0 → 12
+      return `${hours} ${ampm}`;
     }
   }
 
-  getWeatherImage(temp: number, condition: string): string {
-    const cond = condition?.toLowerCase() || '';
+  formatTimeTo12Hour(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString([], {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    });
+  }
+
+  getWeatherConditionByCode(weatherCode: number): string {
+    return WEATHER_CODE_MAP[weatherCode] || WEATHER_TYPES.CLEAR;
+  }
+
+  getWeatherImageByCode(weatherCode: number): string {
+    const condition =
+      this.getWeatherConditionByCode(weatherCode)?.toLowerCase();
 
     switch (true) {
-      case cond.includes(WEATHER_TYPES.SUNNY.toLowerCase()):
-      case cond.includes(WEATHER_TYPES.CLEAR.toLowerCase()):
+      case condition.includes('sunny') || condition.includes('clear'):
         return 'assets/sun.png';
-
-      case cond.includes(WEATHER_TYPES.PARTLY_CLOUDY.toLowerCase()):
+      case condition.includes('partly cloudy'):
         return 'assets/partly-cloudy.png';
-
-      case cond.includes(WEATHER_TYPES.MOSTLY_CLOUDY.toLowerCase()):
-      case cond.includes(WEATHER_TYPES.CLOUDY.toLowerCase()):
+      case condition.includes('mostly cloudy'):
+        return 'assets/mostly-cloudy.png';
+      case condition.includes('cloudy'):
         return 'assets/cloud.png';
-
-      case cond.includes(WEATHER_TYPES.FOG.toLowerCase()):
+      case condition.includes('fog'):
         return 'assets/fog.png';
-
-      case cond.includes(WEATHER_TYPES.RAINY.toLowerCase()):
+      case condition.includes('rain'):
         return 'assets/rain.png';
-
-      case cond.includes(WEATHER_TYPES.HEAVY_RAIN.toLowerCase()):
+      case condition.includes('heavy rain'):
         return 'assets/heavy-rain.png';
-
-      case cond.includes(WEATHER_TYPES.THUNDERSTORM.toLowerCase()):
+      case condition.includes('thunderstorm'):
         return 'assets/thunder.png';
-
-      case cond.includes(WEATHER_TYPES.SNOWY.toLowerCase()):
-      case cond.includes(WEATHER_TYPES.SLEET_HAIL.toLowerCase()):
+      case condition.includes('snow') || condition.includes('sleet'):
         return 'assets/snow.png';
-
-      case cond.includes(WEATHER_TYPES.WINDY.toLowerCase()):
+      case condition.includes('windy'):
         return 'assets/windy.png';
-
-      case cond.includes(WEATHER_TYPES.EXTREME_HOT.toLowerCase()):
+      case condition.includes('extreme hot'):
         return 'assets/extreme-hot.png';
-
-      case cond.includes(WEATHER_TYPES.EXTREME_COLD.toLowerCase()):
+      case condition.includes('extreme cold'):
         return 'assets/extreme-cold.png';
-
       default:
-        if (temp >= 35) return 'assets/sun.png';
-        if (temp >= 25) return 'assets/partly-cloudy.png';
-        if (temp < 15) return 'assets/cold.png';
         return 'assets/sun.png';
     }
   }

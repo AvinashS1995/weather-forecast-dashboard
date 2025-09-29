@@ -19,7 +19,6 @@ export class WeatherCardComponent {
   }
 
   ngOnInit() {
-    this.todayWeatherDetails();
     this.updateTime();
     setInterval(() => this.updateTime(), 60000);
   }
@@ -36,17 +35,5 @@ export class WeatherCardComponent {
     });
 
     this.currentTime = `${day} ${time}`;
-  }
-
-  todayWeatherDetails() {
-    const todayDate = new Date().toISOString().split('T')[0];
-    this.todayHourly = this.weather.forecast.hourly.filter((h: any) => {
-      return h.time.startsWith(todayDate);
-    });
-
-    console.log('todayHourly', this.todayHourly);
-
-    this.todayDaily = this.weather.forecast.daily[0];
-    console.log('todayDaily', this.todayDaily);
   }
 }

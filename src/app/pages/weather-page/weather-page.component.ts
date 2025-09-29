@@ -51,8 +51,10 @@ export class WeatherPageComponent {
             data.forecast.hourly.apparent_temperature[i];
           const visibility = data.forecast.hourly.visibility[i];
           const weather_code = data.forecast.hourly.weather_code[i];
+
           return {
-            time: this.commonService.formatDate(t),
+            time: t,
+            hourDateTime: this.commonService.formatTime(t, false),
             temp,
             wind,
             humidity,
@@ -61,12 +63,8 @@ export class WeatherPageComponent {
             apparent_temperature,
             visibility,
             weather_code,
-            condition: this.commonService.getWeatherCondition(
-              temp,
-              precipitation,
-              humidity,
-              wind
-            ),
+            condition:
+              this.commonService.getWeatherConditionByCode(weather_code),
           };
         });
 
@@ -81,16 +79,25 @@ export class WeatherPageComponent {
           const sunrise = data.forecast.daily.sunrise[i];
           const sunset = data.forecast.daily.sunset[i];
           const uv_index_max = data.forecast.daily.uv_index_max[i];
+          const weather_code = data.forecast.daily.weather_code[i];
+          const wind = data.forecast.daily.windspeed_10m_max[i];
+          const humidity = data.forecast.daily.relative_humidity_2m_max[i];
           return {
-            time: this.commonService.formatDate(t),
+            time: t,
+            dailyDateTime: this.commonService.formatTime(t, true),
             appratent_temp_max,
             appratent_temp_min,
             temp_max,
             temp_min,
             daylight_duration,
-            sunrise: this.commonService.formatDate(sunrise),
-            sunset: this.commonService.formatDate(sunset),
+            sunrise: this.commonService.formatTimeTo12Hour(sunrise),
+            sunset: this.commonService.formatTimeTo12Hour(sunset),
             uv_index_max,
+            weather_code,
+            wind,
+            humidity,
+            condition:
+              this.commonService.getWeatherConditionByCode(weather_code),
           };
         });
 
@@ -113,6 +120,8 @@ export class WeatherPageComponent {
 
         const today = {
           temperature: data.forecast.current.temperature_2m,
+          temp_max: daily?.[0]?.temp_max,
+          temp_min: daily?.[0]?.temp_min,
           apparent_temp: data.forecast.current.apparent_temperature,
           condition: hourly?.[0]?.condition,
           wind: hourly?.[0]?.wind || 0,
@@ -122,7 +131,7 @@ export class WeatherPageComponent {
           uvIndex: daily?.[0]?.uv_index_max || 0,
           sunrise: daily?.[0]?.sunrise || '',
           sunset: daily?.[0]?.sunset || '',
-          airQuality: data.forecast.airQuality?.pm2_5 || 0,
+          airQuality: data.forecast.airQuality?.label || 0,
         };
 
         this.weatherData = {
@@ -142,5 +151,31 @@ export class WeatherPageComponent {
       },
       error: (err) => console.error('Failed to fetch weather:', err),
     });
+  }
+
+  getSunProgress(sunrise?: string, sunset?: string): number {
+    if (!sunrise || !sunset) return 0; // no data yet → start at 0
+
+    const now = Date.now();
+    const sr = new Date(sunrise).getTime();
+    const ss = new Date(sunset).getTime();
+
+    if (isNaN(sr) || isNaN(ss)) return 0; // invalid dates
+
+    if (now <= sr) return 0;
+    if (now >= ss) return 100;
+    return ((now - sr) / (ss - sr)) * 100;
+  }
+
+  getMoonProgress(sunrise?: string, sunset?: string): number {
+    return 100 - this.getSunProgress(sunrise, sunset);
+  }
+
+  getArcPoint(progress: number, radius = 16) {
+    if (progress < 0 || progress > 100) progress = 0; // safety
+    const angle = Math.PI * (progress / 100); // 0–π
+    const x = 18 - radius * Math.cos(angle);
+    const y = 18 - radius * Math.sin(angle);
+    return { x, y };
   }
 }

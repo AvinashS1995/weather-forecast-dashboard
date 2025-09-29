@@ -3,7 +3,7 @@
   <div class="flex justify-between items-center">
     <h2 class="text-gray-500 text-sm">Current Weather</h2>
     <div class="text-sm text-gray-600 flex items-center gap-1 cursor-pointer">
-      Fahrenheit
+      Weather Forecast
       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
         viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -12,14 +12,14 @@
     </div>
   </div>
 
-  <p class="mt-1 text-lg font-semibold">
-    {{ currentTime || '2:59PM' }}
+  <p class="mt-1 text-sm font-semibold">
+    {{ currentTime || '' }}
   </p>
 
   <div class="flex items-center justify-between mt-4">
     <div class="flex items-center gap-3">
       <img src="assets/sun.png" class="w-12 h-12" />
-      <p class="text-4xl font-bold">
+      <p class="text-2xl font-bold">
         {{ weather?.forecast?.today?.temperature }}°C
       </p>
     </div>
@@ -35,7 +35,7 @@
   </div>
 
   <p class="mt-4 text-gray-600 text-sm">
-    There will be mostly sunny skies. High: {{ todayDaily?.temp_max }}° / Low: {{ todayDaily?.temp_min }}°
+    There will be mostly sunny skies. High: {{ weather?.forecast?.today?.temp_max }}° / Low: {{ weather?.forecast?.today?.temp_min }}°
 
   </p>
 </div>
