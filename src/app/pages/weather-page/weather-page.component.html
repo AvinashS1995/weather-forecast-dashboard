@@ -1,32 +1,32 @@
 <div class="p-4 sm:p-6 bg-gray-200">
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-    <div class="lg:col-span-2 space-y-6">
+    <div class="lg:col-span-2 space-y-6 h-full">
 
-      <app-weather-card [weather]="weatherData"></app-weather-card>
+      <app-weather-card [weather]="weatherData" class="h-full"></app-weather-card>
 
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        <div class="bg-white rounded-2xl shadow p-4 text-center">
+        <div class="bg-white rounded-2xl shadow p-4 text-center h-full">
           <p class="text-gray-400 text-xs sm:text-sm">Air Quality</p>
           <p class="font-bold text-base sm:text-lg">{{ weatherData?.forecast.today.airQuality }}</p>
         </div>
-        <div class="bg-white rounded-2xl shadow p-4 text-center">
+        <div class="bg-white rounded-2xl shadow p-4 text-center h-full">
           <p class="text-gray-400 text-xs sm:text-sm">Wind</p>
           <p class="font-bold text-base sm:text-lg">{{ weatherData?.forecast.today.wind }} mph</p>
         </div>
-        <div class="bg-white rounded-2xl shadow p-4 text-center">
+        <div class="bg-white rounded-2xl shadow p-4 text-center h-full">
           <p class="text-gray-400 text-xs sm:text-sm">Humidity</p>
           <p class="font-bold text-base sm:text-lg">{{ weatherData?.forecast.today.humidity }}%</p>
         </div>
-        <div class="bg-white rounded-2xl shadow p-4 text-center">
+        <div class="bg-white rounded-2xl shadow p-4 text-center h-full">
           <p class="text-gray-400 text-xs sm:text-sm">Visibility</p>
           <p class="font-bold text-base sm:text-lg">{{ weatherData?.forecast.today.visibility }} mi</p>
         </div>
-        <div class="bg-white rounded-2xl shadow p-4 text-center">
+        <div class="bg-white rounded-2xl shadow p-4 text-center h-full">
           <p class="text-gray-400 text-xs sm:text-sm">Pressure</p>
           <p class="font-bold text-base sm:text-lg">{{ weatherData?.forecast.today.pressure }}</p>
         </div>
-        <div class="bg-white rounded-2xl shadow p-4 text-center">
+        <div class="bg-white rounded-2xl shadow p-4 text-center h-full">
           <p class="text-gray-400 text-xs sm:text-sm">UV Index</p>
           <p class="font-bold text-base sm:text-lg">{{ weatherData?.forecast.today.uvIndex }}</p>
         </div>
@@ -74,7 +74,9 @@
 
     </div>
     <div>
-      <app-forecast-list [weather]="weatherData"></app-forecast-list>
+      <div class="h-full flex flex-col">
+      <app-forecast-list [weather]="weatherData" class="flex-1 h-full"></app-forecast-list>
+    </div>
     </div>
   </div>
 </div>

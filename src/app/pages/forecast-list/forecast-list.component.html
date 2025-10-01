@@ -1,8 +1,7 @@
-<div class="bg-white rounded-2xl shadow p-4 sm:p-6 relative">
- 
-  <div
-    class="flex gap-6 border-b pb-2 mb-4 text-sm sm:text-base bg-white sticky top-0 z-20"
-  >
+<div class="bg-white rounded-2xl shadow p-4 sm:p-6 h-full flex flex-col">
+
+  <!-- Tabs -->
+  <div class="flex gap-6 border-b pb-2 mb-4 text-sm sm:text-base bg-white sticky top-0 z-20">
     <button
       *ngFor="let tab of tabs"
       (click)="selectTab(tab)"
@@ -16,12 +15,12 @@
     </button>
   </div>
 
-  <div class="divide-y max-h-[600px] overflow-y-auto">
+  <!-- Scrollable List -->
+  <div class="divide-y overflow-y-auto flex-1 max-h-[600px]">
     <div
       *ngFor="let item of filteredHours"
       class="flex items-center justify-between py-4"
     >
-   
       <div class="flex items-center gap-3">
         <img [src]="item.image" class="w-8 h-8" />
         <div>
@@ -38,10 +37,9 @@
         <p class="text-lg sm:text-xl font-semibold">
           {{ item.temp ? item.temp + '°C' : item.temp_min + '°C - ' + item.temp_max + '°C' }}
         </p>
-        <p class="text-xs text-gray-500" >Wind: {{ item.wind }} km/h</p>
-        <p class="text-xs text-gray-500" >Humidity: {{ item.humidity }}%</p>
+        <p class="text-xs text-gray-500">Wind: {{ item.wind }} km/h</p>
+        <p class="text-xs text-gray-500">Humidity: {{ item.humidity }}%</p>
       </div>
     </div>
   </div>
 </div>
-
