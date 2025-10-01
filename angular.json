@@ -57,17 +57,7 @@
                   "maximumWarning": "2kB",
                   "maximumError": "4kB"
                 }
-              ],
-              "terserOptions": {
-                "compress": {
-                  "drop_console": true,
-                  "pure_funcs": [
-                    "console.log",
-                    "console.debug",
-                    "debugger"
-                  ]
-                }
-              }
+              ]
             },
             "development": {
               "optimization": false,
@@ -111,8 +101,22 @@
             ],
             "scripts": []
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
+  },
+  "cli": {
+    "schematicCollections": [
+      "angular-eslint"
+    ]
   }
 }
