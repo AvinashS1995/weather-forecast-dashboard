@@ -1,0 +1,12 @@
+<div class="flex flex-col min-h-screen">
+  <div class="sticky top-0 z-50">
+    <app-navbar (searchCity)="onSearchCity($event)"></app-navbar>
+
+  </div>
+
+  <main class="flex-1 bg-gray-200">
+    <router-outlet></router-outlet>
+  </main>
+
+   <app-footer></app-footer>
+</div>
