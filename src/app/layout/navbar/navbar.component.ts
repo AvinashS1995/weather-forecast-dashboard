@@ -65,6 +65,10 @@ export class NavbarComponent {
     }
   }
 
+  ngOnInit() {
+    this.useCurrentLocation(true);
+  }
+
   onInputChange() {
     this.$searchSubject.next(this.searchTerm);
   }
@@ -77,7 +81,7 @@ export class NavbarComponent {
     console.log('Selected city:', city);
   }
 
-  useCurrentLocation() {
+  useCurrentLocation(emitEvent: boolean = false) {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
@@ -91,8 +95,14 @@ export class NavbarComponent {
             .pipe(takeUntil(this.$destroy))
             .subscribe((res) => {
               if (res.status === 'success') {
-                this.searchTerm = res.data.city;
+                this.searchTerm = `${res.data.city}, ${res.data.country}`;
                 this.filteredCities = [res.data];
+
+                if (emitEvent) {
+                  this.searchCity.emit(res.data);
+                  this.apiService.setCity(res.data);
+                  this.filteredCities = [];
+                }
               }
             });
         },

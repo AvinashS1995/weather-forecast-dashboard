@@ -23,6 +23,9 @@ export class WeatherPageComponent {
   arcColor: string = '#94a3b8';
   isDay: boolean = true;
 
+  screenWidth: number = window.innerWidth;
+  svgViewBox: string = '1 6 100 70'; // default for large screens
+
   private timerSub: Subscription | null = null;
 
   constructor(
@@ -31,6 +34,9 @@ export class WeatherPageComponent {
   ) {}
 
   ngOnInit() {
+    this.updateSvgViewBox();
+    window.addEventListener('resize', this.onResize.bind(this));
+
     this.apiService.city$.subscribe((city) => {
       if (city) this.getWeather(city);
     });
@@ -42,7 +48,6 @@ export class WeatherPageComponent {
         const data = res.data;
 
         const todayDate = new Date().toISOString().split('T')[0];
-        debugger;
         const todayHourly = data.forecast.hourly.time.filter((time: any) => {
           return new Date(time).toDateString() === new Date().toDateString();
         });
@@ -170,8 +175,17 @@ export class WeatherPageComponent {
     });
   }
 
+  onResize() {
+    this.screenWidth = window.innerWidth;
+    this.updateSvgViewBox();
+  }
+
+  updateSvgViewBox() {
+    this.svgViewBox = this.screenWidth < 640 ? '6 0 100 110' : '1 6 100 70';
+  }
+
   startSunMoonAnimation() {
-    this.updateSunMoonPosition(); // initial position
+    this.updateSunMoonPosition();
     this.timerSub = interval(1000 * 60).subscribe(() =>
       this.updateSunMoonPosition()
     );
