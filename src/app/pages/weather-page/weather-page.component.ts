@@ -113,6 +113,7 @@ export class WeatherPageComponent {
             const apparent_temperature =
               data.forecast.minutely_15.apparent_temperature[i];
             const temp = data.forecast.minutely_15.temperature_2m[i];
+            const weather_code = data.forecast.minutely_15.weather_code[i];
             const visibility = (
               data.forecast.minutely_15.visibility[i] / 1609
             ).toFixed(1);
@@ -121,12 +122,13 @@ export class WeatherPageComponent {
               apparent_temperature,
               temp,
               visibility,
+              weather_code,
             };
           }
         );
 
         const today = {
-          temperature: data.forecast.current.temperature_2m,
+          temperature: minutely_15?.[0]?.temp,
           temp_max: daily?.[0]?.temp_max,
           temp_min: daily?.[0]?.temp_min,
           apparent_temp: data.forecast.current.apparent_temperature,
@@ -139,6 +141,9 @@ export class WeatherPageComponent {
           sunrise: daily?.[0]?.sunrise || '',
           sunset: daily?.[0]?.sunset || '',
           airQuality: data.forecast.airQuality?.label || 0,
+          image: this.commonService.getWeatherImageByCode(
+            minutely_15?.[0]?.weather_code
+          ),
         };
 
         this.weatherData = {

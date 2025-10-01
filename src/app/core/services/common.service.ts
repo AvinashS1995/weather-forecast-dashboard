@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { WEATHER_CODE_MAP, WEATHER_TYPES } from '../common/constant';
+import { WEATHER_CODE_MAP, WEATHER_IMAGE_MAP } from '../common/constant';
 
 @Injectable({
   providedIn: 'root',
@@ -52,40 +52,10 @@ export class CommonService {
   }
 
   getWeatherConditionByCode(weatherCode: number): string {
-    return WEATHER_CODE_MAP[weatherCode] || WEATHER_TYPES.CLEAR;
+    return WEATHER_CODE_MAP[weatherCode];
   }
 
   getWeatherImageByCode(weatherCode: number): string {
-    const condition =
-      this.getWeatherConditionByCode(weatherCode)?.toLowerCase();
-
-    switch (true) {
-      case condition.includes('sunny') || condition.includes('clear'):
-        return 'assets/sun.png';
-      case condition.includes('partly cloudy'):
-        return 'assets/partly-cloudy.png';
-      case condition.includes('mostly cloudy'):
-        return 'assets/mostly-cloudy.png';
-      case condition.includes('cloudy'):
-        return 'assets/cloud.png';
-      case condition.includes('fog'):
-        return 'assets/fog.png';
-      case condition.includes('rain'):
-        return 'assets/rain.png';
-      case condition.includes('heavy rain'):
-        return 'assets/heavy-rain.png';
-      case condition.includes('thunderstorm'):
-        return 'assets/thunder.png';
-      case condition.includes('snow') || condition.includes('sleet'):
-        return 'assets/snow.png';
-      case condition.includes('windy'):
-        return 'assets/windy.png';
-      case condition.includes('extreme hot'):
-        return 'assets/extreme-hot.png';
-      case condition.includes('extreme cold'):
-        return 'assets/extreme-cold.png';
-      default:
-        return 'assets/sun.png';
-    }
+    return WEATHER_IMAGE_MAP[weatherCode] || 'assets/sun.png';
   }
 }
