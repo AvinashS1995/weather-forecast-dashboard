@@ -37,37 +37,25 @@
         <div class="flex flex-col items-center">
           <svg [attr.viewBox]="svgViewBox" class="w-full max-w-lg h-60">
             <!-- Arc -->
-            <path 
-              d="M 10 50 A 40 40 0 0 1 90 50"
-              fill="none"
-              [attr.stroke]="arcColor"
-              stroke-width="4"
+            <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" [attr.stroke]="arcColor" stroke-width="4"
               stroke-linecap="round" />
 
-            <!-- Sun or Moon -->
-            <circle
-              *ngIf="isDay"
-              [attr.cx]="sunPosition.x"
-              [attr.cy]="sunPosition.y"
-              r="5"
-              fill="#fbbf24"
-              stroke="#d97706"
-              stroke-width="2">
+            <!-- Sun -->
+            <circle *ngIf="isDay" [attr.cx]="sunPosition.x" [attr.cy]="sunPosition.y" r="5" fill="#fbbf24"
+              stroke="#d97706" stroke-width="2">
             </circle>
 
-            <circle
-              *ngIf="!isDay"
-              [attr.cx]="moonPosition.x"
-              [attr.cy]="moonPosition.y"
-              r="5"
-              fill="#3b82f6"
-              stroke="#1e40af"
-              stroke-width="2">
+            <!-- Moon -->
+            <circle *ngIf="!isDay" [attr.cx]="moonPosition.x" [attr.cy]="moonPosition.y" r="5" fill="#3b82f6"
+              stroke="#1e40af" stroke-width="2">
             </circle>
+
 
             <!-- Sunrise / Sunset Labels -->
-            <text x="-6" y="63" font-size="6" fill="#666" *ngIf="weatherData?.forecast.today.sunrise">🌅 {{weatherData?.forecast.today.sunrise}}</text>
-            <text x="73" y="63" font-size="6" fill="#666" *ngIf="weatherData?.forecast.today.sunset">🌇 {{weatherData?.forecast.today.sunset}}</text>
+            <text x="-6" y="63" font-size="6" fill="#666" *ngIf="weatherData?.forecast.today.sunrise">
+              {{ startLabel }}</text>
+            <text x="73" y="63" font-size="6" fill="#666" *ngIf="weatherData?.forecast.today.sunset">
+              {{ endLabel }}</text>
           </svg>
         </div>
       </div>
@@ -75,8 +63,8 @@
     </div>
     <div>
       <div class="h-full flex flex-col">
-      <app-forecast-list [weather]="weatherData" class="flex-1 h-full"></app-forecast-list>
-    </div>
+        <app-forecast-list [weather]="weatherData" class="flex-1 h-full"></app-forecast-list>
+      </div>
     </div>
   </div>
 </div>

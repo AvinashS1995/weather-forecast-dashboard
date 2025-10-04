@@ -26,6 +26,9 @@ export class WeatherPageComponent {
   screenWidth: number = window.innerWidth;
   svgViewBox: string = '1 6 100 70';
 
+  startLabel = ""; // 🌅 Sunrise or Sunset depending on time
+  endLabel = "";
+
   private timerSub: Subscription | null = null;
 
   constructor(
@@ -195,29 +198,46 @@ export class WeatherPageComponent {
     );
   }
 
-  updateSunMoonPosition() {
-    if (!this.weatherData?.forecast?.today) return;
+ updateSunMoonPosition() {
+  if (!this.weatherData?.forecast?.today) return;
 
-    const sunrise = this.weatherData.forecast.today.sunriseRaw;
-    const sunset = this.weatherData.forecast.today.sunsetRaw;
-    const now = new Date();
+  const sunrise = this.weatherData.forecast.today.sunriseRaw;
+  const sunset = this.weatherData.forecast.today.sunsetRaw;
+  const now = new Date();
 
-    const nowTime = now.getTime();
-    const srTime = new Date(sunrise).getTime();
-    const ssTime = new Date(sunset).getTime();
+  const nowTime = now.getTime();
+  const srTime = new Date(sunrise).getTime();
+  const ssTime = new Date(sunset).getTime();
 
-    // Determine if it's day or night
-    this.isDay = nowTime >= srTime && nowTime <= ssTime;
+  // tomorrow's sunrise (for night arc)
+  const tomorrowSunrise = this.weatherData.forecast.daily[1]?.sunriseRaw;
+  const tomorrowSrTime = tomorrowSunrise
+    ? new Date(tomorrowSunrise).getTime()
+    : srTime + 24 * 3600 * 1000;
 
-    // Compute Sun or Moon progress
+  // Determine if it's day or night
+  this.isDay = nowTime >= srTime && nowTime <= ssTime;
+
+  if (this.isDay) {
+    // 🌞 Sun progress: sunrise → sunset
     const sunProgress = this.calculateSunProgress(sunrise, sunset, now);
-    const moonProgress = 100 - sunProgress;
-
     this.sunPosition = this.getArcPoint(sunProgress, 40);
-    this.moonPosition = this.getArcPoint(moonProgress, 40);
+    this.arcColor = '#fbbf24'; // yellow arc
 
-    this.arcColor = this.calculateArcColor(sunrise, sunset, now);
+    // Labels: Sunrise on left, Sunset on right
+    this.startLabel = `🌅 ${this.weatherData.forecast.today.sunrise}`;
+    this.endLabel   = `🌇 ${this.weatherData.forecast.today.sunset}`;
+  } else {
+    // 🌙 Moon progress: sunset → tomorrow sunrise
+    const moonProgress = this.calculateMoonProgress(sunset, tomorrowSunrise, now);
+    this.moonPosition = this.getArcPoint(moonProgress, 40);
+    this.arcColor = '#3b82f6'; // blue arc
+
+    // Labels: Sunset on left, Sunrise (next day) on right
+    this.startLabel = `🌇 ${this.weatherData.forecast.today.sunset}`;
+    this.endLabel   = `🌅 ${this.weatherData.forecast.daily[1]?.sunrise || this.weatherData.forecast.today.sunrise}`;
   }
+}
 
   calculateSunProgress(
     sunrise?: string,
@@ -233,6 +253,20 @@ export class WeatherPageComponent {
     return ((now - sr) / (ss - sr)) * 100;
   }
 
+  calculateMoonProgress(
+    sunset?: string,
+    nextSunrise?: string,
+    currentTime: string | Date = new Date()
+  ): number {
+    if (!sunset || !nextSunrise) return 0;
+    const now = new Date(currentTime).getTime();
+    const ss = new Date(sunset).getTime();
+    const nsr = new Date(nextSunrise).getTime();
+    if (now <= ss) return 0;
+    if (now >= nsr) return 100;
+    return ((now - ss) / (nsr - ss)) * 100;
+  }
+
   getArcPoint(progress: number, radius = 40) {
     const angle = Math.PI * (progress / 100);
     const x = 50 - radius * Math.cos(angle);
@@ -240,19 +274,6 @@ export class WeatherPageComponent {
     return { x, y };
   }
 
-  calculateArcColor(
-    sunrise?: string,
-    sunset?: string,
-    currentTime: string | Date = new Date()
-  ): string {
-    if (!sunrise || !sunset) return '#94a3b8';
-    const now = new Date(currentTime).getTime();
-    const sr = new Date(sunrise).getTime();
-    const ss = new Date(sunset).getTime();
-    if (now < sr) return '#3b82f6'; // Night
-    if (now >= sr && now <= ss) return '#fbbf24'; // Day
-    return '#9333ea'; // Evening
-  }
 
   ngOnDestroy() {
     if (this.timerSub) this.timerSub.unsubscribe();
