@@ -24,7 +24,7 @@ export class WeatherPageComponent {
   isDay: boolean = true;
 
   screenWidth: number = window.innerWidth;
-  svgViewBox: string = '1 6 100 70'; // default for large screens
+  svgViewBox: string = '1 6 100 70';
 
   private timerSub: Subscription | null = null;
 
@@ -104,6 +104,8 @@ export class WeatherPageComponent {
             daylight_duration,
             sunrise: this.commonService.formatTimeTo12Hour(sunrise),
             sunset: this.commonService.formatTimeTo12Hour(sunset),
+            sunriseRaw: sunrise,
+            sunsetRaw: sunset,
             uv_index_max,
             weather_code,
             wind,
@@ -145,6 +147,8 @@ export class WeatherPageComponent {
           uvIndex: daily?.[0]?.uv_index_max || 0,
           sunrise: daily?.[0]?.sunrise || '',
           sunset: daily?.[0]?.sunset || '',
+          sunriseRaw: daily?.[0]?.sunriseRaw,
+          sunsetRaw: daily?.[0]?.sunsetRaw,
           airQuality: data.forecast.airQuality?.label || 0,
           image: this.commonService.getWeatherImageByCode(
             minutely_15?.[0]?.weather_code
