@@ -108,7 +108,7 @@ public/assets/                # weather icons + logo
 ## Demo / Deployment
 
 - **Live Demo (placeholder):** [https://weather-forecast-dashboard-theta.vercel.app/weather](https://weather-forecast-dashboard-theta.vercel.app/weather)
-- **Preview Screenshot (add to repo and update link):** ![App preview](SCREENSHOT_LINK)
+- **Preview Screenshot (add to repo and update link):** ![App preview](public/assets/preview.png)
 - **Deployment notes:** run `npm run build -- --configuration=production`, then serve `dist/weather-forecast-dashboard` with your chosen host (Vercel, Netlify, Firebase, etc.).
 
 ## Contributing
